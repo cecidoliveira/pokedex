@@ -10,7 +10,9 @@ function corvertPokeApiDetailToPokemon(pokeDetail){
     const [type1] = types;
     pokemon.types = types;
     pokemon.typesPrimary = type1;
-    
+
+    pokemon.abilities = pokeDetail.abilities.map((abilitiesSlot)=> abilitiesSlot.ability.name);
+    pokemon.weight = pokeDetail.weight;
     return pokemon
 }
 
@@ -29,4 +31,14 @@ pokeApi.getPokemonsDetails = (pokemon) =>{
     return fetch(pokemon.url)
         .then((response) => response.json())
         .then(corvertPokeApiDetailToPokemon)
+}
+
+pokeApi.getPokemonsModal = (namePokemon) => {
+    const url = `https://pokeapi.co/api/v2/pokemon/${namePokemon}`
+    return fetch(url)
+        .then((response) => response.json())
+        .then((details) => corvertPokeApiDetailToPokemon(details))
+        // .then((details) => console.log(Promise.all(details)))
+        // .then((pokemonsDetails) => pokemonsDetails)
+        .catch((error)=> console.error(error))
 }
